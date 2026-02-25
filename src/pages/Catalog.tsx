@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function Catalog() {
+  // Rotation globale (si toutes tes images ont le même sens)
   const ROTATION_DEG = -90;
 
   const modules = import.meta.glob(
@@ -31,7 +32,7 @@ export function Catalog() {
     setOpenIndex((openIndex + 1) % total);
   };
 
-  // Clavier + bloquer le scroll derrière (mobile)
+  // Clavier + bloquer scroll derrière (important sur mobile)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -52,11 +53,22 @@ export function Catalog() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, openIndex, total]);
 
+  // ✅ Astuce clé: si rotation 90°/-90°, on inverse les contraintes
+  const isQuarterTurn = Math.abs(ROTATION_DEG) % 180 === 90;
+
+  // Zone visible dans la lightbox (viewport)
+  const VIEW_W = "92vw";
+  const VIEW_H = "82svh";
+
+  // Si rotation 90°, on swap maxWidth/maxHeight pour éviter le “crop”
+  const imgMaxWidth = isQuarterTurn ? VIEW_H : VIEW_W;
+  const imgMaxHeight = isQuarterTurn ? VIEW_W : VIEW_H;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         {images.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {images.map((url, idx) => (
               <button
                 key={url}
@@ -65,10 +77,8 @@ export function Catalog() {
                 className="group bg-white rounded-xl shadow-sm overflow-hidden"
                 aria-label={`Ouvrir l'image ${idx + 1}`}
               >
-                {/* Sur mobile: ratio paysage (4/3) -> mieux pour tes images rotatées.
-                    Sur sm+: carré */}
-                <div className="aspect-[4/3] sm:aspect-square bg-gray-100 overflow-hidden">
-                  <div className="h-full w-full flex items-center justify-center p-2 sm:p-0">
+                <div className="aspect-square bg-gray-100 overflow-hidden">
+                  <div className="h-full w-full flex items-center justify-center p-2">
                     <img
                       src={url}
                       alt=""
@@ -93,7 +103,7 @@ export function Catalog() {
         )}
       </div>
 
-      {/* LIGHTBOX (mobile friendly) */}
+      {/* LIGHTBOX (mobile compatible + image entière visible) */}
       {isOpen && openIndex !== null && (
         <div
           className="fixed inset-0 z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4"
@@ -102,23 +112,29 @@ export function Catalog() {
           aria-modal="true"
         >
           <div
-            className="relative w-full max-w-5xl"
+            className="relative"
             onClick={(e) => e.stopPropagation()}
+            style={{ width: VIEW_W, maxWidth: "1024px" }}
           >
-            <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
-              {/* svh = mieux sur mobile (barre d'adresse) */}
-              <div className="w-full h-[80svh] sm:h-[75vh] flex items-center justify-center bg-gray-50 relative">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+              <div
+                className="relative flex items-center justify-center bg-gray-50"
+                style={{ height: VIEW_H }}
+              >
                 <img
                   src={images[openIndex]}
                   alt=""
-                  className="max-h-full max-w-full object-contain"
                   style={{
                     transform: `rotate(${ROTATION_DEG}deg)`,
                     transformOrigin: "center",
+                    maxWidth: imgMaxWidth,
+                    maxHeight: imgMaxHeight,
+                    width: "auto",
+                    height: "auto",
                   }}
                 />
 
-                {/* Fermer (visible sur mobile) */}
+                {/* Fermer */}
                 <button
                   type="button"
                   onClick={close}
@@ -128,7 +144,7 @@ export function Catalog() {
                   <X className="h-5 w-5" />
                 </button>
 
-                {/* Navigation (avec fond pour visibilité) */}
+                {/* Navigation */}
                 {total > 1 && (
                   <>
                     <button
@@ -153,7 +169,7 @@ export function Catalog() {
               </div>
             </div>
 
-            {/* Compteur (optionnel) */}
+            {/* Compteur (tu peux supprimer si tu veux) */}
             <div className="mt-2 text-center text-gray-600 text-sm">
               {openIndex + 1} / {total}
             </div>
