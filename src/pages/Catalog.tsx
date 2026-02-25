@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function Catalog() {
-  // Ajuste ici si besoin : 90 ou -90 selon le sens correct
   const ROTATION_DEG = -90;
 
   const modules = import.meta.glob(
@@ -17,10 +16,10 @@ export function Catalog() {
   }, [modules]);
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const close = () => setOpenIndex(null);
   const isOpen = openIndex !== null;
   const total = images.length;
+
+  const close = () => setOpenIndex(null);
 
   const prev = () => {
     if (openIndex === null) return;
@@ -32,7 +31,7 @@ export function Catalog() {
     setOpenIndex((openIndex + 1) % total);
   };
 
-  // Clavier: ESC, flèches
+  // Clavier + bloquer le scroll derrière (mobile)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -43,17 +42,21 @@ export function Catalog() {
     };
 
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, openIndex, total]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* (Header supprimé) */}
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         {images.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {images.map((url, idx) => (
               <button
                 key={url}
@@ -62,14 +65,19 @@ export function Catalog() {
                 className="group bg-white rounded-xl shadow-sm overflow-hidden"
                 aria-label={`Ouvrir l'image ${idx + 1}`}
               >
-                <div className="aspect-square bg-gray-100 overflow-hidden">
-                  <div className="h-full w-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                {/* Sur mobile: ratio paysage (4/3) -> mieux pour tes images rotatées.
+                    Sur sm+: carré */}
+                <div className="aspect-[4/3] sm:aspect-square bg-gray-100 overflow-hidden">
+                  <div className="h-full w-full flex items-center justify-center p-2 sm:p-0">
                     <img
                       src={url}
                       alt=""
                       loading="lazy"
-                      className="max-h-full max-w-full object-contain"
-                      style={{ transform: `rotate(${ROTATION_DEG}deg)` }}
+                      className="w-full h-full object-contain"
+                      style={{
+                        transform: `rotate(${ROTATION_DEG}deg)`,
+                        transformOrigin: "center",
+                      }}
                     />
                   </div>
                 </div>
@@ -85,10 +93,10 @@ export function Catalog() {
         )}
       </div>
 
-      {/* LIGHTBOX (fond clair) */}
+      {/* LIGHTBOX (mobile friendly) */}
       {isOpen && openIndex !== null && (
         <div
-          className="fixed inset-0 z-50 bg-white/90 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4"
           onClick={close}
           role="dialog"
           aria-modal="true"
@@ -97,53 +105,56 @@ export function Catalog() {
             className="relative w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Fermer */}
-            <button
-              type="button"
-              onClick={close}
-              className="absolute -top-12 right-0 text-gray-700 hover:text-gray-900 p-2"
-              aria-label="Fermer"
-            >
-              <X className="h-7 w-7" />
-            </button>
-
-            {/* Image */}
             <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
-              <div className="w-full h-[70vh] flex items-center justify-center bg-gray-50">
+              {/* svh = mieux sur mobile (barre d'adresse) */}
+              <div className="w-full h-[80svh] sm:h-[75vh] flex items-center justify-center bg-gray-50 relative">
                 <img
                   src={images[openIndex]}
                   alt=""
                   className="max-h-full max-w-full object-contain"
-                  style={{ transform: `rotate(${ROTATION_DEG}deg)` }}
+                  style={{
+                    transform: `rotate(${ROTATION_DEG}deg)`,
+                    transformOrigin: "center",
+                  }}
                 />
+
+                {/* Fermer (visible sur mobile) */}
+                <button
+                  type="button"
+                  onClick={close}
+                  className="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 shadow"
+                  aria-label="Fermer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                {/* Navigation (avec fond pour visibilité) */}
+                {total > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={prev}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 shadow"
+                      aria-label="Image précédente"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={next}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 shadow"
+                      aria-label="Image suivante"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Navigation */}
-            {total > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={prev}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 p-3"
-                  aria-label="Image précédente"
-                >
-                  <ChevronLeft className="h-10 w-10" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={next}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900 p-3"
-                  aria-label="Image suivante"
-                >
-                  <ChevronRight className="h-10 w-10" />
-                </button>
-              </>
-            )}
-
-            {/* Compteur */}
-            <div className="mt-3 text-center text-gray-600 text-sm">
+            {/* Compteur (optionnel) */}
+            <div className="mt-2 text-center text-gray-600 text-sm">
               {openIndex + 1} / {total}
             </div>
           </div>
