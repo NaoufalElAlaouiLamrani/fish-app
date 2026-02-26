@@ -28,10 +28,10 @@ export function Contact() {
                 <div>
                   <p className="font-semibold text-gray-900 mb-1">E-mail</p>
                   <a
-                    href="mailto:contact@distribution-benslimane.ma"
+                    href="mailto:mbenslimane522@gmail.com"
                     className="text-cyan-700 hover:text-cyan-800"
                   >
-                    mbenslimane522@gmail.com    
+                    mbenslimane522@gmail.com
                   </a>
                 </div>
               </div>
@@ -55,7 +55,7 @@ export function Contact() {
                 Appeler
               </a>
               <a
-                href="mailto:contact@distribution-benslimane.ma"
+                href="mailto:mbenslimane522@gmail.com"
                 className="flex-1 border border-cyan-200 text-cyan-700 px-6 py-3 rounded-lg font-semibold hover:bg-cyan-50 transition-all text-center"
               >
                 Envoyer un e-mail

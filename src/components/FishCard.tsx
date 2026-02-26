@@ -1,5 +1,5 @@
 import { Fish } from '../types/fish';
-import { useNavigation } from '../context/NavigationContext';
+import { useNavigation } from '../context/useNavigation';
 import { MapPin, Package } from 'lucide-react';
 
 interface FishCardProps {
@@ -10,9 +10,11 @@ export function FishCard({ fish }: FishCardProps) {
   const { navigateTo } = useNavigation();
 
   return (
-    <div
+    <button
+      type="button"
       onClick={() => navigateTo('fish-detail', fish.id)}
-      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
+      className="w-full text-left bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-600"
+      aria-label={`Voir les details de ${fish.nom}`}
     >
       <div className="relative h-48 overflow-hidden bg-gray-200">
         <img
@@ -51,6 +53,6 @@ export function FishCard({ fish }: FishCardProps) {
           <span className="text-sm text-gray-500">{fish.mode}</span>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

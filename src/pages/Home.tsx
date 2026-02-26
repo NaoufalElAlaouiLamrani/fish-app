@@ -1,5 +1,5 @@
 import { ChevronRight, Waves, Shield, Truck, HeadphonesIcon } from 'lucide-react';
-import { useNavigation } from '../context/NavigationContext';
+import { useNavigation } from '../context/useNavigation';
 
 export function Home() {
   const { navigateTo } = useNavigation();

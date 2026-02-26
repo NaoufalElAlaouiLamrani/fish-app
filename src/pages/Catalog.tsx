@@ -53,14 +53,14 @@ export function Catalog() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, openIndex, total]);
 
-  // ✅ Astuce clé: si rotation 90°/-90°, on inverse les contraintes
+  // Astuce clé: si rotation 90°/-90°, on inverse les contraintes
   const isQuarterTurn = Math.abs(ROTATION_DEG) % 180 === 90;
 
   // Zone visible dans la lightbox (viewport)
   const VIEW_W = "92vw";
   const VIEW_H = "82svh";
 
-  // Si rotation 90°, on swap maxWidth/maxHeight pour éviter le “crop”
+  // Si rotation 90°, on swap maxWidth/maxHeight pour éviter le crop
   const imgMaxWidth = isQuarterTurn ? VIEW_H : VIEW_W;
   const imgMaxHeight = isQuarterTurn ? VIEW_W : VIEW_H;
 
@@ -169,7 +169,7 @@ export function Catalog() {
               </div>
             </div>
 
-            {/* Compteur (tu peux supprimer si tu veux) */}
+            {/* Compteur */}
             <div className="mt-2 text-center text-gray-600 text-sm">
               {openIndex + 1} / {total}
             </div>

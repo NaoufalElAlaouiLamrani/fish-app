@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode } from 'react';
 
-type Page = 'home' | 'catalog' | 'contact' | 'fish-detail';
+export type Page = 'home' | 'catalog' | 'contact' | 'fish-detail';
 
 interface NavigationContextType {
   currentPage: Page;
@@ -8,7 +8,7 @@ interface NavigationContextType {
   navigateTo: (page: Page, fishId?: string) => void;
 }
 
-const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
+export const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -27,12 +27,4 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       {children}
     </NavigationContext.Provider>
   );
-}
-
-export function useNavigation() {
-  const context = useContext(NavigationContext);
-  if (context === undefined) {
-    throw new Error('useNavigation must be used within a NavigationProvider');
-  }
-  return context;
 }

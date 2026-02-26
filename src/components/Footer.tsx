@@ -27,7 +27,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <a
-              href="mailto:contact@distribution-benslimane.ma"
+              href="mailto:mbenslimane522@gmail.com"
               className="flex items-center space-x-2 text-gray-400 hover:text-cyan-400 transition-colors text-sm"
             >
               <Mail className="h-4 w-4" />

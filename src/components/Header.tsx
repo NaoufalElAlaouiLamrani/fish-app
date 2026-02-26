@@ -1,12 +1,13 @@
 import { Fish, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigation } from '../context/NavigationContext';
+import { Page } from '../context/NavigationContext';
+import { useNavigation } from '../context/useNavigation';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentPage, navigateTo } = useNavigation();
 
-  const navItems = [
+  const navItems: Array<{ id: Page; label: string }> = [
     { id: 'home', label: 'Accueil' },
     { id: 'catalog', label: 'Catalogue' },
     { id: 'contact', label: 'Contact' },
@@ -29,7 +30,7 @@ export function Header() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => navigateTo(item.id as 'home' | 'catalog' | 'contact')}
+                onClick={() => navigateTo(item.id)}
                 className={`px-3 py-2 text-sm font-medium transition-colors ${
                   currentPage === item.id
                     ? 'text-cyan-700 border-b-2 border-cyan-700'
@@ -55,7 +56,7 @@ export function Header() {
               <button
                 key={item.id}
                 onClick={() => {
-                  navigateTo(item.id as 'home' | 'catalog' | 'contact');
+                  navigateTo(item.id);
                   setMobileMenuOpen(false);
                 }}
                 className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors ${
