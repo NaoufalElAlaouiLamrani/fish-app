@@ -19,7 +19,7 @@ export function Contact({ language }: ContactProps) {
     const body = isEnglish
       ? `Company: ${fields.company}\nCountry: ${fields.country}\nContact email: ${fields.email}\nProduct: ${fields.product}\nEstimated quantity: ${fields.quantity}\nDestination port: ${fields.destination}\n\nAdditional information:\n${fields.message}`
       : `Entreprise : ${fields.company}\nPays : ${fields.country}\nEmail : ${fields.email}\nProduit : ${fields.product}\nQuantité estimée : ${fields.quantity}\nPort de destination : ${fields.destination}\n\nInformations complémentaires :\n${fields.message}`;
-    window.location.href = `mailto:naoufalelalaouilamrani@gmail.com?cc=mbenslimane522@gmail.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:mbenslimane522@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -48,9 +48,9 @@ export function Contact({ language }: ContactProps) {
               {isEnglish ? 'Contact Mohammed Benslimane for product and commercial enquiries.' : 'Contactez Mohammed Benslimane pour les demandes produits et commerciales.'}
             </p>
             <div className="mt-7 space-y-5">
-              <a href="mailto:naoufalelalaouilamrani@gmail.com" className="flex gap-3 text-sm hover:text-cyan-300">
+              <a href="mailto:mbenslimane522@gmail.com" className="flex gap-3 text-sm hover:text-cyan-300">
                 <Mail className="h-5 w-5 shrink-0 text-cyan-300" />
-                <span>naoufalelalaouilamrani@gmail.com</span>
+                <span>mbenslimane522@gmail.com</span>
               </a>
               <a href="tel:+212663200846" className="flex gap-3 text-sm hover:text-cyan-300">
                 <Phone className="h-5 w-5 shrink-0 text-cyan-300" />

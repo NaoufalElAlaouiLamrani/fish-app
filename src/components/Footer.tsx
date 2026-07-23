@@ -40,11 +40,11 @@ export function Footer({ language }: FooterProps) {
           <div>
             <h3 className="font-semibold text-lg mb-4">{isEnglish ? 'Commercial contact' : 'Contact commercial'}</h3>
             <a
-              href="mailto:naoufalelalaouilamrani@gmail.com"
+              href="mailto:mbenslimane522@gmail.com"
               className="flex items-center space-x-2 text-slate-400 hover:text-cyan-300 transition-colors text-sm"
             >
               <Mail className="h-4 w-4" />
-              <span>naoufalelalaouilamrani@gmail.com</span>
+              <span>mbenslimane522@gmail.com</span>
             </a>
             <a href="tel:+212663200846" className="mt-3 flex items-center space-x-2 text-slate-400 hover:text-cyan-300 transition-colors text-sm">
               <Phone className="h-4 w-4" />
