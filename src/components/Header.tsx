@@ -34,7 +34,7 @@ export function Header({ language, onLanguageChange }: HeaderProps) {
             <span className="text-left">
               <span className="font-bold text-base sm:text-lg block leading-tight">Distribution Benslimane</span>
               <span className="text-[11px] uppercase tracking-[0.18em] text-cyan-300 hidden sm:block">
-                Moroccan seafood supply
+                {language === 'en' ? 'Moroccan seafood supply' : 'Produits de la mer du Maroc'}
               </span>
             </span>
           </button>
